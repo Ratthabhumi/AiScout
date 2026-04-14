@@ -27,10 +27,11 @@ RSS_FEEDS = [
     ("TechCrunch",       "https://techcrunch.com/feed/"),
 ]
 
-SAVE_FILE      = "ai_scout_progress.txt"
-SEEN_FILE      = "seen_titles.txt"
-STATE_FILE     = "scout_state.json"
-OBSIDIAN_VAULT = "Obsidian_Knowledge"
+DATA_DIR = os.getenv("DATA_DIR", ".")
+SAVE_FILE      = os.path.join(DATA_DIR, "ai_scout_progress.txt")
+SEEN_FILE      = os.path.join(DATA_DIR, "seen_titles.txt")
+STATE_FILE     = os.path.join(DATA_DIR, "scout_state.json")
+OBSIDIAN_VAULT = os.path.join(DATA_DIR, "Obsidian_Knowledge")
 DAILY_DIR      = os.path.join(OBSIDIAN_VAULT, "daily")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -399,16 +400,15 @@ if __name__ == "__main__":
     scout = AIScout()
     print("\n🚀 AI Scout v3.0 — Skill Tree Edition! (Ctrl+C เพื่อหยุด)\n")
 
-    last_synapse_date = ""
-
     try:
         while True:
             scout.farm()
 
-            # Synapse runs ONCE per day (when date changes) to stay within free-tier quota
+            # Synapse runs ONCE per day — persisted in state to survive container restarts
             today = time.strftime('%Y-%m-%d')
-            if today != last_synapse_date:
-                last_synapse_date = today
+            if today != scout.state.get("last_synapse_date", ""):
+                scout.state["last_synapse_date"] = today
+                scout._save_state()
                 try:
                     print("\n🧠 Daily Synapse Merge...")
                     synapse_engine.run_synapse_merge(batch_size=20)
