@@ -6,7 +6,9 @@ import os
 import re
 from datetime import datetime
 
-DB_FILE = "scout_brain.db"
+# On Railway, data volume is mounted at /app/data — fall back to local for dev
+_DATA_DIR = os.getenv("DATA_DIR", ".")
+DB_FILE   = os.path.join(_DATA_DIR, "scout_brain.db")
 
 
 def get_conn():
