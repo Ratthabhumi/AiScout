@@ -7,8 +7,9 @@ import sqlite3
 import os
 import json
 
-DB_FILE    = "scout_brain.db"
+DB_FILE    = os.path.join(os.getenv("DATA_DIR", "."), "scout_brain.db")
 OUTPUT_HTML = "brain_graph.html"
+
 
 COLORS = {
     "source":          "#6366f1",
