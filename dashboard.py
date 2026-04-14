@@ -23,9 +23,11 @@ except ImportError:
     HAS_GEMINI = False
     client = None
 
+DB_PATH = os.path.join(os.getenv("DATA_DIR", "."), "scout_brain.db")
+
 try:
     import scout_db
-    HAS_DB = os.path.exists("scout_brain.db")
+    HAS_DB = os.path.exists(DB_PATH)
 except ImportError:
     HAS_DB = False
 
@@ -33,7 +35,6 @@ HAS_GRAPH = os.path.exists("graph_engine.py")
 
 LOG_FILE   = "ai_scout_progress.txt"
 STATE_FILE = "scout_state.json"
-DB_PATH    = os.path.join(os.getenv("DATA_DIR", "."), "scout_brain.db")
 
 st.set_page_config(page_title="Mew's AI Scout Dashboard", page_icon="🤖", layout="wide")
 st.title("🤖 Mew's AI Scout: Progression Dashboard")
