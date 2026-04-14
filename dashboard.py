@@ -329,7 +329,8 @@ with tab2:
                 st.caption(f"Graph อายุ {age_min} นาที | Auto-rebuild ทุก 30 นาที")
 
         if os.path.exists(GRAPH_HTML):
-            st.iframe(GRAPH_HTML, height=740)
+            from pathlib import Path
+            st.iframe(Path(GRAPH_HTML), height=740)
 
 
             gen_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(GRAPH_HTML)))
