@@ -1,1 +1,1 @@
-worker: python ai_scout.py
+web: python start.py
