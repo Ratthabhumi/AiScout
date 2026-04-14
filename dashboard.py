@@ -314,14 +314,18 @@ with tab2:
                         st.error(f"❌ Error: {e}")
 
         with col_upload:
-            uploaded = st.file_uploader("📤 Import DB", type=["db"], label_visibility="visible")
-            if uploaded:
-                os.makedirs(os.path.dirname(DB_PATH) if os.path.dirname(DB_PATH) else ".", exist_ok=True)
-                with open(DB_PATH, "wb") as f:
-                    f.write(uploaded.read())
-                st.success(f"✅ Import สำเร็จ!")
-                st.cache_data.clear()
-                st.rerun()
+            # 📤 Import DB ถูกปิดไว้หลังจาห Migrate ขึ้น Cloud สำเร็จ (เพื่อป้องกันคนอื่นอัปโหลดทับ)
+            # st.markdown("*(DB Upload Disabled)*")
+            pass
+            # uploaded = st.file_uploader("📤 Import DB", type=["db"], label_visibility="visible")
+            # if uploaded:
+            #     os.makedirs(os.path.dirname(DB_PATH) if os.path.dirname(DB_PATH) else ".", exist_ok=True)
+            #     with open(DB_PATH, "wb") as f:
+            #         f.write(uploaded.read())
+            #     st.success(f"✅ Import สำเร็จ!")
+            #     st.cache_data.clear()
+            #     st.rerun()
+
 
         with col_info:
             if graph_exists:
