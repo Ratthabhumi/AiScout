@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Secrets & Config
+.env.local
+config.secret.json
+
+# Database (local data — do not commit)
+scout_brain.db
+
+# Runtime files (regenerated on each run)
+scout_state.json
+seen_titles.txt
+ai_scout_progress.txt
+brain_graph.html
+
+# Obsidian vault (personal notes — exclude from repo)
+Obsidian_Knowledge/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
