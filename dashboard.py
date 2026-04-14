@@ -15,9 +15,11 @@ except ImportError:
 
 try:
     from google import genai
-    GEMINI_API_KEY = "AIzaSyCufQkV9Zn-GGCt5UO56Lae7Qtepm7En-I"
-    client = genai.Client(api_key=GEMINI_API_KEY)
-    HAS_GEMINI = True
+    from dotenv import load_dotenv
+    load_dotenv()
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+    client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
+    HAS_GEMINI = bool(GEMINI_API_KEY)
 except ImportError:
     HAS_GEMINI = False
     client = None

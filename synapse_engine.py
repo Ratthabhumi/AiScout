@@ -4,14 +4,17 @@ Batch-processes articles to extract and merge entities into the knowledge graph.
 """
 import json
 import time
+import os
 import sys
 from google import genai
+from dotenv import load_dotenv
 import scout_db
 
 if sys.stdout.encoding != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
 
-GEMINI_API_KEY = "AIzaSyCufQkV9Zn-GGCt5UO56Lae7Qtepm7En-I"
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 

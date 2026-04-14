@@ -6,11 +6,14 @@ import re
 import json
 import requests
 from google import genai
+from dotenv import load_dotenv
 import scout_db
 import synapse_engine
 
-GEMINI_API_KEY = "AIzaSyCufQkV9Zn-GGCt5UO56Lae7Qtepm7En-I"
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1493675753454178405/S72smIixkuqs0YrbIu8Cn6di1CRVQ2SN4fvXmxi5AupmAdKdEQVrNeDQ-691NH4mz0Qr" 
+load_dotenv()
+
+GEMINI_API_KEY    = os.getenv("GEMINI_API_KEY", "")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
 
 RSS_FEEDS = [
     ("Blognone",         "https://www.blognone.com/node/feed"),
