@@ -1,6 +1,6 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import subprocess
+
 import pandas as pd
 import time
 import os
@@ -329,9 +329,8 @@ with tab2:
                 st.caption(f"Graph อายุ {age_min} นาที | Auto-rebuild ทุก 30 นาที")
 
         if os.path.exists(GRAPH_HTML):
-            with open(GRAPH_HTML, "r", encoding="utf-8") as f:
-                html_content = f.read()
-            components.html(html_content, height=740, scrolling=False)
+            st.iframe(GRAPH_HTML, height=740)
+
 
             gen_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(GRAPH_HTML)))
             st.caption(f"Generated: {gen_time} | คลิก Node เพื่อดูรายละเอียด | Drag เพื่อหมุน")
