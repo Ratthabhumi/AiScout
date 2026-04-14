@@ -126,19 +126,48 @@ with tab1:
         st.warning("⚠️ ยังไม่พบข้อมูล กรุณารอให้บอทรันสักพัก...")
 
 
-    if not df.empty:
-        st.subheader("📈 Progression: EXP Cumulative Growth")
+    st.subheader("📈 Progression: EXP Cumulative Growth")
+    if HAS_DB:
+        with scout_db.get_conn() as _conn:
+            _rows = _conn.execute(
+                "SELECT timestamp, exp_gained FROM articles ORDER BY timestamp ASC"
+            ).fetchall()
+        if _rows:
+            _chart_df = pd.DataFrame(_rows, columns=["Timestamp", "EXP_Gained"])
+            _chart_df["Timestamp"] = pd.to_datetime(_chart_df["Timestamp"])
+            _chart_df = (_chart_df.set_index("Timestamp")
+                                  .resample("1h").sum(numeric_only=True).fillna(0))
+            _chart_df["Cumulative_EXP"] = _chart_df["EXP_Gained"].cumsum()
+            st.line_chart(_chart_df["Cumulative_EXP"])
+        else:
+            st.info("รอบอทฟาร์มข่าว แล้วกราฟจะขึ้นครับ")
+    elif not df.empty:
         df_cumulative = (df.set_index("Timestamp")
                            .resample("1h").sum(numeric_only=True).fillna(0))
         df_cumulative["Cumulative_EXP"] = df_cumulative["EXP_Gained"].cumsum()
         st.line_chart(df_cumulative["Cumulative_EXP"])
+    else:
+        st.info("รอบอทฟาร์มข่าว แล้วกราฟจะขึ้นครับ")
 
-    if state and "skill_exp" in state:
-        st.subheader("🧠 Skill Tree: Neural Map")
+    if HAS_DB:
+        sk_data   = scout_db.get_skill_stats()
+        labels    = ["🛡️ Security", "☁️ Cloud/Infra", "🤖 AI/Business"]
+        values    = [
+            sk_data.get("security", {}).get("exp", 0),
+            sk_data.get("cloud",    {}).get("exp", 0),
+            sk_data.get("ai_biz",   {}).get("exp", 0),
+        ]
+        show_skill = True
+    elif state and "skill_exp" in state:
         sk     = state["skill_exp"]
         labels = ["🛡️ Security", "☁️ Cloud/Infra", "🤖 AI/Business"]
         values = [sk.get("security", 0), sk.get("cloud", 0), sk.get("ai_biz", 0)]
+        show_skill = True
+    else:
+        show_skill = False
 
+    if show_skill:
+        st.subheader("🧠 Skill Tree: Neural Map")
         col_radar, col_bars = st.columns([1, 1])
         with col_radar:
             if HAS_PLOTLY:
