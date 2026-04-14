@@ -222,9 +222,24 @@ body {{
 <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.3/dist/3d-force-graph.min.js"></script>
 <script>
 const DATA = {data_json};
-const tooltip = document.getElementById('tooltip');
+const GraphDiv = document.getElementById('graph');
 
-const Graph = ForceGraph3D()(document.getElementById('graph'))
+// ✅ WebGL Diagnostic Check
+function hasWebGL() {
+    try {
+        const canvas = document.createElement('canvas');
+        return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+    } catch(e) { return false; }
+}
+
+if (!hasWebGL()) {
+    GraphDiv.innerHTML = '<div style="color:#ef4444; padding:100px; text-align:center; font-family:sans-serif;">' +
+        '<h2>⚠️ WebGL Not Supported</h2>' +
+        '<p>บราวเซอร์ของคุณบล็อกการใช้งานการ์ดจอ (Graphics Acceleration)<br>' +
+        'กรุณาเปิด <b>Hardware Acceleration</b> ในช่อง Settings ของบราวเซอร์ครับ</p></div>';
+}
+
+const Graph = ForceGraph3D()(GraphDiv)
   .graphData(DATA)
   .backgroundColor('#04080f')
 
