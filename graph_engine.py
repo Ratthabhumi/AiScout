@@ -219,7 +219,7 @@ body {{
   Click node to focus
 </div>
 
-<script src="https://unpkg.com/3d-force-graph@1/dist/3d-force-graph.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.3/dist/3d-force-graph.min.js"></script>
 <script>
 const DATA = {data_json};
 const tooltip = document.getElementById('tooltip');
