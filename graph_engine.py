@@ -219,7 +219,7 @@ body {{
   Click node to focus
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.3/dist/3d-force-graph.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.3/dist/3d-force-graph.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/3d-force-graph@1.73.3/dist/3d-force-graph.min.js';"></script>
 <script>
 const DATA = {data_json};
 const GraphDiv = document.getElementById('graph');
@@ -237,11 +237,17 @@ if (!hasWebGL()) {
         '<h2>⚠️ WebGL Not Supported</h2>' +
         '<p>บราวเซอร์ของคุณบล็อกการใช้งานการ์ดจอ (Graphics Acceleration)<br>' +
         'กรุณาเปิด <b>Hardware Acceleration</b> ในช่อง Settings ของบราวเซอร์ครับ</p></div>';
-}
+} else if (typeof ForceGraph3D === 'undefined') {
+    GraphDiv.innerHTML = '<div style="color:#ef4444; padding:100px; text-align:center; font-family:sans-serif;">' +
+        '<h2>⚠️ Script Load Failed</h2>' +
+        '<p>ไม่สามารถโหลดสคริปต์วาดกราฟได้ กรุณาเช็คการเชื่อมต่ออินเทอร์เน็ต<br>' +
+        'หรือลองปิดโปรแกรมบล็อกโฆษณา (AdBlock) ครับ</p></div>';
+} else {
+    try {
+        const Graph = ForceGraph3D()(GraphDiv)
+          .graphData(DATA)
+          .backgroundColor('#04080f')
 
-const Graph = ForceGraph3D()(GraphDiv)
-  .graphData(DATA)
-  .backgroundColor('#04080f')
 
   // Nodes
   .nodeLabel(() => '')      // ใช้ tooltip เอง
@@ -302,6 +308,13 @@ const rotTimer = setInterval(() => {{
 // Stop rotation on user drag
 document.getElementById('graph').addEventListener('mousedown', () => {{ rotating = false; }});
 document.getElementById('graph').addEventListener('wheel',     () => {{ rotating = false; }});
+    } catch (err) {
+        console.error(err);
+        GraphDiv.innerHTML = '<div style="color:#ef4444; padding:100px; text-align:center; font-family:sans-serif;">' +
+            '<h2>⚠️ Graph Rendering Error</h2>' +
+            '<p>เกิดข้อผิดพลาดในการวาดกราฟ: ' + err.message + '</p></div>';
+    }
+}
 </script>
 </body>
 </html>"""
