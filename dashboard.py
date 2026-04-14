@@ -315,17 +315,7 @@ with tab2:
                         st.error(f"❌ Error: {e}")
 
         with col_upload:
-            # 📤 Import DB ถูกปิดไว้หลังจาห Migrate ขึ้น Cloud สำเร็จ (เพื่อป้องกันคนอื่นอัปโหลดทับ)
-            # st.markdown("*(DB Upload Disabled)*")
             pass
-            # uploaded = st.file_uploader("📤 Import DB", type=["db"], label_visibility="visible")
-            # if uploaded:
-            #     os.makedirs(os.path.dirname(DB_PATH) if os.path.dirname(DB_PATH) else ".", exist_ok=True)
-            #     with open(DB_PATH, "wb") as f:
-            #         f.write(uploaded.read())
-            #     st.success(f"✅ Import สำเร็จ!")
-            #     st.cache_data.clear()
-            #     st.rerun()
 
 
         with col_info:
@@ -334,8 +324,8 @@ with tab2:
                 st.caption(f"Graph อายุ {age_min} นาที | Auto-rebuild ทุก 30 นาที")
 
         if os.path.exists(GRAPH_HTML):
-            # ใช้ components.html แบบเดิม ห้ามเปลี่ยนเป็น st.iframe เด็ดขาด เพราะ Sandbox จะบล็อก WebGL 3D
             with open(GRAPH_HTML, "r", encoding="utf-8") as f:
+
                 html_content = f.read()
             components.html(html_content, height=740, scrolling=False)
 
