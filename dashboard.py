@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import subprocess
 import pandas as pd
 import time
@@ -243,7 +242,7 @@ with tab2:
 
         col_btn, col_synapse, col_info = st.columns([1, 1, 2])
         with col_btn:
-            if st.button("🔄 Force Rebuild", use_container_width=True):
+            if st.button("🔄 Force Rebuild", width="stretch"):
                 with st.spinner("กำลังสร้าง Knowledge Graph..."):
                     proc = do_rebuild()
                 if proc.returncode == 0:
@@ -254,7 +253,7 @@ with tab2:
                     st.error(f"❌ Error: {proc.stderr[-300:]}")
 
         with col_synapse:
-            if st.button("🧬 Run Synapse Merge", use_container_width=True):
+            if st.button("🧬 Run Synapse Merge", width="stretch"):
                 with st.spinner("🧠 กำลังให้ AI เชื่อม Entity..."):
                     try:
                         import synapse_engine
@@ -275,7 +274,7 @@ with tab2:
         if os.path.exists(GRAPH_HTML):
             with open(GRAPH_HTML, "r", encoding="utf-8") as f:
                 html_content = f.read()
-            components.html(html_content, height=740, scrolling=False)
+            st.iframe(html_content, height=740, scrolling=False)
 
             gen_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(GRAPH_HTML)))
             st.caption(f"Generated: {gen_time} | คลิก Node เพื่อดูรายละเอียด | Drag เพื่อหมุน")
@@ -296,7 +295,7 @@ with tab3:
         if src_stats:
             src_df = pd.DataFrame(src_stats)
             src_df.columns = ["Source", "Articles", "EXP", "Gold"]
-            st.dataframe(src_df, use_container_width=True, hide_index=True)
+            st.dataframe(src_df, width="stretch", hide_index=True)
         else:
             st.info("ยังไม่มีข้อมูล")
 
@@ -305,7 +304,7 @@ with tab3:
         if entities:
             ent_df = pd.DataFrame(entities)
             ent_df.columns = ["Entity", "Type", "Mentions", "Last Seen"]
-            st.dataframe(ent_df, use_container_width=True, hide_index=True)
+            st.dataframe(ent_df, width="stretch", hide_index=True)
         else:
             st.info("Entity จะแสดงหลังบอทฟาร์มได้ Gold ครับ")
     else:

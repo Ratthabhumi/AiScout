@@ -28,7 +28,6 @@ dashboard_proc = subprocess.Popen(
         "--server.port", PORT,
         "--server.address", "0.0.0.0",
         "--server.headless", "true",
-        "--server.enableCORS", "false",
     ],
     stdout=sys.stdout,
     stderr=sys.stderr
