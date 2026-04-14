@@ -210,7 +210,7 @@ with tab1:
 
     st.subheader("📁 Harvest Mode: Latest Farmed Items (Gold)")
     if HAS_DB:
-        gold_items = scout_db.get_gold_items(limit=15)
+        gold_items = scout_db.get_gold_items(limit=30)
         if gold_items:
             for item in gold_items:
                 ts      = item["timestamp"]
