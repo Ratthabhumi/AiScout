@@ -398,16 +398,23 @@ tier: {tier}
 if __name__ == "__main__":
     scout = AIScout()
     print("\n🚀 AI Scout v3.0 — Skill Tree Edition! (Ctrl+C เพื่อหยุด)\n")
+
+    last_synapse_date = ""
+
     try:
         while True:
             scout.farm()
-            # Synapse runs every 5 farm cycles to reduce Gemini API usage
-            if scout.state["farm_count"] % 5 == 0:
+
+            # Synapse runs ONCE per day (when date changes) to stay within free-tier quota
+            today = time.strftime('%Y-%m-%d')
+            if today != last_synapse_date:
+                last_synapse_date = today
                 try:
-                    print("\n🧠 Auto-Synapse Merging...")
-                    synapse_engine.run_synapse_merge(batch_size=10)
+                    print("\n🧠 Daily Synapse Merge...")
+                    synapse_engine.run_synapse_merge(batch_size=20)
                 except Exception as e:
-                    print(f"⚠️ Auto-Synapse Error: {e}")
+                    print(f"⚠️ Synapse skipped (quota): {type(e).__name__}")
+
             wait_min = random.randint(10, 20)
             print(f"\n💤 คูลดาวน์ {wait_min} นาที...\n")
             time.sleep(wait_min * 60)
