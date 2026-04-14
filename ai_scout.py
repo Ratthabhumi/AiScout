@@ -3,6 +3,14 @@ import time
 import random
 import os
 import re
+import logging
+
+os.environ["TZ"] = "Asia/Bangkok"
+try:
+    time.tzset()
+except AttributeError:
+    pass
+
 import json
 import requests
 from google import genai

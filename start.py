@@ -9,6 +9,13 @@ import os
 import signal
 import time
 
+# บังคับใช้โซนเวลาไทยเสมอเพื่อป้องกันบั๊กเรียงลำดับเวลา (Railway default เป็น UTC)
+os.environ["TZ"] = "Asia/Bangkok"
+try:
+    time.tzset()
+except AttributeError:
+    pass  # Windows ไม่มีคำสั่งนี้ อนุโลมข้ามไป
+
 PORT = os.getenv("PORT", "8501")
 
 print("🚀 Starting AI Scout System...")

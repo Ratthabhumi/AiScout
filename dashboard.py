@@ -5,6 +5,13 @@ import subprocess
 import pandas as pd
 import time
 import os
+
+os.environ["TZ"] = "Asia/Bangkok"
+try:
+    time.tzset()
+except AttributeError:
+    pass
+
 import re
 import json
 
