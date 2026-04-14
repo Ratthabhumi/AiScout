@@ -13,6 +13,7 @@ env/
 .env
 
 # Secrets & Config
+.env
 .env.local
 config.secret.json
 
