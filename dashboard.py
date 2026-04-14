@@ -40,21 +40,6 @@ st.set_page_config(page_title="Mew's AI Scout Dashboard", page_icon="🤖", layo
 st.title("🤖 Mew's AI Scout: Progression Dashboard")
 st.markdown("---")
 
-with st.sidebar:
-    st.header("⚙️ Admin")
-    st.markdown("**📤 Import Local Database**")
-    st.caption("อัปโหลด scout_brain.db จากคอมบ้านขึ้น Cloud")
-    uploaded = st.file_uploader("เลือกไฟล์ scout_brain.db", type=["db"], label_visibility="collapsed")
-    if uploaded:
-        dest = DB_PATH
-        os.makedirs(os.path.dirname(dest) if os.path.dirname(dest) else ".", exist_ok=True)
-        with open(dest, "wb") as f:
-            f.write(uploaded.read())
-        st.success(f"✅ อัปโหลดสำเร็จ! ({uploaded.size:,} bytes)")
-        st.cache_data.clear()
-        st.rerun()
-    st.divider()
-    st.caption(f"DB: `{DB_PATH}`")
 
 
 
@@ -259,7 +244,7 @@ with tab2:
             if proc.returncode != 0:
                 st.error(f"❌ Build Error: {proc.stderr[-200:]}")
 
-        col_btn, col_synapse, col_info = st.columns([1, 1, 2])
+        col_btn, col_synapse, col_upload, col_info = st.columns([1, 1, 1, 1])
         with col_btn:
             if st.button("🔄 Force Rebuild", width="stretch"):
                 with st.spinner("กำลังสร้าง Knowledge Graph..."):
@@ -284,6 +269,16 @@ with tab2:
                             st.info("✅ สมองเชื่อมต่อครบหมดแล้ว!")
                     except Exception as e:
                         st.error(f"❌ Error: {e}")
+
+        with col_upload:
+            uploaded = st.file_uploader("📤 Import DB", type=["db"], label_visibility="visible")
+            if uploaded:
+                os.makedirs(os.path.dirname(DB_PATH) if os.path.dirname(DB_PATH) else ".", exist_ok=True)
+                with open(DB_PATH, "wb") as f:
+                    f.write(uploaded.read())
+                st.success(f"✅ Import สำเร็จ!")
+                st.cache_data.clear()
+                st.rerun()
 
         with col_info:
             if graph_exists:
