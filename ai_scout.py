@@ -334,7 +334,11 @@ tier: {tier}
             tier_name, tier_cfg = self.get_tier(total_score)
 
             if tier_name and random.random() < tier_cfg["chance"]:
-                insight    = self.analyze_opportunity(entry.title)
+                # Only call Gemini for Gold tier to preserve free-tier daily quota
+                if tier_name == "gold":
+                    insight = self.analyze_opportunity(entry.title)
+                else:
+                    insight = f"บทความ {SKILL_TREE[dominant_skill]['name']} น่าสนใจ — ติดตามเพื่อเพิ่มความรู้"
                 gained_gold = random.randint(*tier_cfg["gold_range"])
                 self.state["gold"] += gained_gold
 
@@ -397,11 +401,13 @@ if __name__ == "__main__":
     try:
         while True:
             scout.farm()
-            try:
-                print("\n🧠 Auto-Synapse Merging...")
-                synapse_engine.run_synapse_merge(batch_size=10)
-            except Exception as e:
-                print(f"⚠️ Auto-Synapse Error: {e}")
+            # Synapse runs every 5 farm cycles to reduce Gemini API usage
+            if scout.state["farm_count"] % 5 == 0:
+                try:
+                    print("\n🧠 Auto-Synapse Merging...")
+                    synapse_engine.run_synapse_merge(batch_size=10)
+                except Exception as e:
+                    print(f"⚠️ Auto-Synapse Error: {e}")
             wait_min = random.randint(10, 20)
             print(f"\n💤 คูลดาวน์ {wait_min} นาที...\n")
             time.sleep(wait_min * 60)
