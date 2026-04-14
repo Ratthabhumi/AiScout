@@ -96,22 +96,35 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🧠 Brain Graph", "📡 Intel"])
 
 
 with tab1:
-    if not df.empty:
-        if state:
-            total_exp     = state["exp"]
-            total_gold    = state["gold"]
-            current_level = state["level"]
-        else:
-            total_exp     = df["EXP_Gained"].sum()
-            total_gold    = df["Gold_Gained"].sum()
-            current_level = (total_exp // 100) + 1
+    # Priority: DB → state.json → log file
+    # On Railway the DB is the source of truth; state.json only exists locally
+    if HAS_DB:
+        db_s          = scout_db.get_stats()
+        total_exp     = db_s["total_exp"]
+        total_gold    = db_s["total_gold"]
+        current_level = (total_exp // 100) + 1
+        show_stats    = True
+    elif state:
+        total_exp     = state["exp"]
+        total_gold    = state["gold"]
+        current_level = state["level"]
+        show_stats    = True
+    elif not df.empty:
+        total_exp     = df["EXP_Gained"].sum()
+        total_gold    = df["Gold_Gained"].sum()
+        current_level = (total_exp // 100) + 1
+        show_stats    = True
+    else:
+        show_stats = False
 
+    if show_stats:
         col1, col2, col3 = st.columns(3)
         col1.metric("⭐ Current Level",    f"Lv. {current_level}")
         col2.metric("✨ Total EXP",        f"{total_exp:,} XP")
         col3.metric("💰 Total Gold Found", f"{total_gold:,} $")
     else:
-        st.warning("⚠️ ยังไม่พบข้อมูล Log กรุณารอให้บอทรันสักพัก...")
+        st.warning("⚠️ ยังไม่พบข้อมูล กรุณารอให้บอทรันสักพัก...")
+
 
     if not df.empty:
         st.subheader("📈 Progression: EXP Cumulative Growth")
