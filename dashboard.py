@@ -33,10 +33,28 @@ HAS_GRAPH = os.path.exists("graph_engine.py")
 
 LOG_FILE   = "ai_scout_progress.txt"
 STATE_FILE = "scout_state.json"
+DB_PATH    = os.path.join(os.getenv("DATA_DIR", "."), "scout_brain.db")
 
 st.set_page_config(page_title="Mew's AI Scout Dashboard", page_icon="🤖", layout="wide")
 st.title("🤖 Mew's AI Scout: Progression Dashboard")
 st.markdown("---")
+
+with st.sidebar:
+    st.header("⚙️ Admin")
+    st.markdown("**📤 Import Local Database**")
+    st.caption("อัปโหลด scout_brain.db จากคอมบ้านขึ้น Cloud")
+    uploaded = st.file_uploader("เลือกไฟล์ scout_brain.db", type=["db"], label_visibility="collapsed")
+    if uploaded:
+        dest = DB_PATH
+        os.makedirs(os.path.dirname(dest) if os.path.dirname(dest) else ".", exist_ok=True)
+        with open(dest, "wb") as f:
+            f.write(uploaded.read())
+        st.success(f"✅ อัปโหลดสำเร็จ! ({uploaded.size:,} bytes)")
+        st.cache_data.clear()
+        st.rerun()
+    st.divider()
+    st.caption(f"DB: `{DB_PATH}`")
+
 
 
 @st.cache_data(ttl=60)
