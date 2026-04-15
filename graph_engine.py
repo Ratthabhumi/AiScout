@@ -308,6 +308,16 @@ const rotTimer = setInterval(() => {{
 // Stop rotation on user drag
 document.getElementById('graph').addEventListener('mousedown', () => {{ rotating = false; }});
 document.getElementById('graph').addEventListener('wheel',     () => {{ rotating = false; }});
+
+// Handle Dynamic Resizing for Streamlit Tabs
+const resizeObserver = new ResizeObserver(entries => {{
+  for (let entry of entries) {{
+    if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {{
+      Graph.width(entry.contentRect.width).height(entry.contentRect.height);
+    }}
+  }}
+}});
+resizeObserver.observe(document.body);
     }} catch (err) {{
         console.error(err);
         GraphDiv.innerHTML = '<div style="color:#ef4444; padding:100px; text-align:center; font-family:sans-serif;">' +

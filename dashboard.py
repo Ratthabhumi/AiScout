@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import subprocess
 
 import pandas as pd
@@ -332,9 +331,8 @@ with tab2:
 
         if os.path.exists(GRAPH_HTML):
             with open(GRAPH_HTML, "r", encoding="utf-8") as f:
-
                 html_content = f.read()
-            components.html(html_content, height=740, scrolling=False)
+            st.iframe(html_content, height=740, scrolling=False)
 
 
             gen_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(GRAPH_HTML)))
