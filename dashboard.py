@@ -332,7 +332,7 @@ with tab2:
         if os.path.exists(GRAPH_HTML):
             with open(GRAPH_HTML, "r", encoding="utf-8") as f:
                 html_content = f.read()
-            st.iframe(html_content, height=740, scrolling=False)
+            st.components.v1.html(html_content, height=740, scrolling=False)
 
 
             gen_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(os.path.getmtime(GRAPH_HTML)))
